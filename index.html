@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>興時代社區區權會投票單 · 完整版</title>
+<style>
+  :root{
+    --ink:#1b2a4a;
+    --ink-soft:#3a4a6b;
+    --paper:#f6f3ec;
+    --paper-card:#fffdf8;
+    --line:#d9d2c2;
+    --line-strong:#c3b9a3;
+    --agree:#1f6b4a;
+    --agree-bg:#e8f2ec;
+    --disagree:#a6402f;
+    --disagree-bg:#f6e9e5;
+    --gold:#b08528;
+    --muted:#7b7566;
+    --shadow:0 1px 2px rgba(27,42,74,.06),0 8px 24px rgba(27,42,74,.07);
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;background:var(--paper);color:var(--ink);
+    font-family:"Noto Serif TC","Songti TC","PMingLiU",serif;
+    line-height:1.78;-webkit-font-smoothing:antialiased;
+  }
+
+  header{
+    position:relative;padding:52px 24px 40px;text-align:center;
+    background:radial-gradient(120% 80% at 50% -20%, rgba(176,133,40,.10), transparent 60%),var(--ink);
+    color:#f6f3ec;overflow:hidden;
+  }
+  header::after{content:"";position:absolute;left:0;right:0;bottom:0;height:4px;
+    background:linear-gradient(90deg,var(--gold),transparent 40%,transparent 60%,var(--gold));opacity:.55;}
+  .eyebrow{font-family:"Noto Sans TC",sans-serif;letter-spacing:.32em;font-size:12px;font-weight:500;
+    color:#d8c79a;margin:0 0 14px;padding-left:.32em;}
+  header h1{margin:0;font-size:clamp(26px,5.5vw,40px);font-weight:700;letter-spacing:.04em;}
+  .sub-title{font-family:"Noto Sans TC",sans-serif;margin-top:12px;font-size:15px;color:#c9cddb;font-weight:300;}
+  .meta-row{display:flex;flex-wrap:wrap;justify-content:center;gap:8px 22px;margin-top:26px;
+    font-family:"Noto Sans TC",sans-serif;font-size:13px;color:#b7bccf;}
+  .meta-row b{color:#f0ead9;font-weight:500}
+  .meta-chip{display:flex;align-items:center;gap:7px}
+
+  .progress-bar{position:sticky;top:0;z-index:50;background:rgba(246,243,236,.92);backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);padding:11px 20px;display:flex;align-items:center;gap:16px;
+    font-family:"Noto Sans TC",sans-serif;}
+  .progress-track{flex:1;height:8px;border-radius:99px;background:#e4ddcd;overflow:hidden;box-shadow:inset 0 1px 2px rgba(0,0,0,.06);}
+  .progress-fill{height:100%;width:0;border-radius:99px;background:linear-gradient(90deg,var(--ink-soft),var(--ink));transition:width .45s cubic-bezier(.4,0,.2,1);}
+  .progress-label{font-size:13px;color:var(--ink);white-space:nowrap;font-weight:500}
+  .progress-label b{font-size:16px;color:var(--gold)}
+
+  main{max-width:820px;margin:0 auto;padding:36px 20px 40px}
+
+  .section-head{display:flex;align-items:baseline;gap:12px;margin:44px 4px 20px;font-family:"Noto Sans TC",sans-serif;}
+  .section-head:first-child{margin-top:8px}
+  .section-head .kanji{font-family:"Noto Serif TC",serif;font-size:22px;font-weight:700;color:var(--ink);}
+  .section-head .en{font-size:12px;letter-spacing:.2em;color:var(--muted);text-transform:uppercase;}
+  .section-head .rule{flex:1;height:1px;background:var(--line-strong)}
+
+  /* preface / dispute box */
+  .preface{
+    background:var(--paper-card);border:1px solid var(--line);border-left:4px solid var(--disagree);
+    border-radius:12px;padding:20px 22px;margin-bottom:26px;box-shadow:var(--shadow);
+  }
+  .preface .p-label{font-family:"Noto Sans TC",sans-serif;font-size:12px;font-weight:600;letter-spacing:.06em;
+    color:var(--disagree);margin-bottom:10px;}
+  .preface p{margin:0 0 10px;font-size:15px;color:#403c33;text-align:justify}
+  .preface p:last-child{margin-bottom:0}
+  .preface .lead{font-weight:600;color:var(--ink)}
+
+  .card{background:var(--paper-card);border:1px solid var(--line);border-radius:14px;padding:22px 22px 20px;
+    margin-bottom:18px;box-shadow:var(--shadow);transition:border-color .25s,box-shadow .25s;scroll-margin-top:80px;}
+  .card.voted{border-color:var(--line-strong)}
+  .card-top{display:flex;align-items:flex-start;gap:14px;margin-bottom:14px}
+  .tag{flex-shrink:0;font-family:"Noto Sans TC",sans-serif;font-size:12px;font-weight:600;letter-spacing:.03em;
+    color:#fff;background:var(--ink);padding:5px 11px;border-radius:7px;line-height:1.4;white-space:nowrap;margin-top:2px;}
+  .tag.resident{background:var(--gold)}
+  .card h3{margin:0;font-size:19px;font-weight:700;letter-spacing:.02em;color:var(--ink);line-height:1.5;}
+
+  .label-mini{font-family:"Noto Sans TC",sans-serif;font-size:12px;font-weight:600;letter-spacing:.05em;
+    color:var(--muted);margin:2px 0 6px;}
+  .desc{font-size:15.5px;color:#403c33;margin:0 0 6px;text-align:justify;}
+  .desc .hi{background:linear-gradient(transparent 62%, #f4e2b8 62%);font-weight:600;color:#5c4a17;padding:0 1px;}
+
+  .cost{display:inline-flex;align-items:center;gap:6px;font-family:"Noto Sans TC",sans-serif;font-size:13px;
+    font-weight:500;color:var(--ink-soft);background:#eef0f5;border:1px solid #dde1ec;padding:4px 10px;border-radius:7px;margin:2px 0 10px;}
+  .cost b{color:var(--disagree)}
+
+  /* expandable proposer draft */
+  details.origin{margin:14px 0 4px;border:1px solid var(--line);border-radius:10px;background:#faf7f0;overflow:hidden;}
+  details.origin summary{
+    font-family:"Noto Sans TC",sans-serif;font-size:13.5px;font-weight:600;color:var(--ink-soft);
+    padding:11px 15px;cursor:pointer;list-style:none;display:flex;align-items:center;gap:9px;user-select:none;
+    transition:background .2s;
+  }
+  details.origin summary:hover{background:#f2ede2}
+  details.origin summary::-webkit-details-marker{display:none}
+  details.origin summary .chev{transition:transform .25s;color:var(--gold);font-size:12px}
+  details.origin[open] summary .chev{transform:rotate(90deg)}
+  details.origin summary .who{color:var(--gold)}
+  .origin-body{padding:4px 16px 16px;border-top:1px solid var(--line);}
+  .origin-body .o-block{margin-top:12px}
+  .origin-body .o-h{font-family:"Noto Sans TC",sans-serif;font-size:12.5px;font-weight:600;color:var(--muted);margin-bottom:3px;}
+  .origin-body p{margin:0 0 8px;font-size:14.5px;color:#4a4438;text-align:justify;line-height:1.72;}
+  .origin-body ol{margin:0 0 8px;padding-left:1.4em}
+  .origin-body ol li{font-size:14.5px;color:#4a4438;margin-bottom:5px;text-align:justify}
+  .origin-body .plea{font-weight:600;color:var(--ink)}
+
+  .question{font-size:15px;color:var(--ink);background:#f1ede3;border-left:3px solid var(--gold);
+    padding:12px 15px;border-radius:0 8px 8px 0;margin:16px 0 16px;text-align:justify;}
+  .question .q-mark{font-family:"Noto Sans TC",sans-serif;font-size:12px;font-weight:600;color:var(--gold);
+    letter-spacing:.08em;display:block;margin-bottom:4px;}
+
+  .votes{display:flex;gap:12px}
+  .vote-btn{flex:1;font-family:"Noto Sans TC",sans-serif;font-size:16px;font-weight:600;padding:14px;border-radius:11px;
+    cursor:pointer;border:1.5px solid var(--line-strong);background:#fbf9f4;color:var(--ink-soft);
+    display:flex;align-items:center;justify-content:center;gap:9px;
+    transition:transform .12s,background .2s,border-color .2s,color .2s,box-shadow .2s;-webkit-tap-highlight-color:transparent;}
+  .vote-btn .dot{width:18px;height:18px;border-radius:50%;border:2px solid currentColor;flex-shrink:0;
+    display:flex;align-items:center;justify-content:center;transition:background .2s;}
+  .vote-btn .dot svg{width:11px;height:11px;opacity:0;transform:scale(.5);transition:.2s}
+  .vote-btn:hover{transform:translateY(-1px)}
+  .vote-btn:active{transform:translateY(0)}
+  .vote-btn:focus-visible{outline:3px solid rgba(27,42,74,.35);outline-offset:2px}
+  .vote-btn.agree.on{background:var(--agree-bg);border-color:var(--agree);color:var(--agree);box-shadow:0 4px 14px rgba(31,107,74,.16);}
+  .vote-btn.disagree.on{background:var(--disagree-bg);border-color:var(--disagree);color:var(--disagree);box-shadow:0 4px 14px rgba(166,64,47,.16);}
+  .vote-btn.on .dot{background:currentColor}
+  .vote-btn.on .dot svg{opacity:1;transform:scale(1)}
+
+  .summary{margin-top:48px;background:var(--ink);color:#f0ead9;border-radius:16px;padding:28px 24px;}
+  .summary h2{font-family:"Noto Serif TC",serif;margin:0 0 4px;font-size:21px;font-weight:700;}
+  .summary .s-sub{font-family:"Noto Sans TC",sans-serif;font-size:13px;color:#b7bccf;margin-bottom:20px}
+  .s-list{display:flex;flex-direction:column;gap:2px}
+  .s-item{display:flex;align-items:center;gap:12px;font-family:"Noto Sans TC",sans-serif;font-size:14px;
+    padding:9px 4px;border-bottom:1px solid rgba(255,255,255,.08);cursor:pointer;}
+  .s-item:last-child{border-bottom:none}
+  .s-name{flex:1;color:#e6e2d5}
+  .s-num{color:#8b93aa;font-size:12px;width:52px;flex-shrink:0}
+  .s-val{font-weight:600;font-size:13px;padding:3px 12px;border-radius:6px;min-width:64px;text-align:center}
+  .s-val.a{background:var(--agree-bg);color:var(--agree)}
+  .s-val.d{background:var(--disagree-bg);color:var(--disagree)}
+  .s-val.none{background:rgba(255,255,255,.08);color:#8b93aa;font-weight:400}
+  .s-actions{display:flex;gap:12px;margin-top:22px;flex-wrap:wrap}
+  .s-btn{font-family:"Noto Sans TC",sans-serif;font-size:14px;font-weight:600;padding:12px 20px;border-radius:10px;
+    cursor:pointer;border:none;display:inline-flex;align-items:center;gap:8px;transition:opacity .2s,transform .12s;}
+  .s-btn:active{transform:scale(.97)}
+  .s-btn.print{background:var(--gold);color:#2a2008}
+  .s-btn.reset{background:transparent;color:#c9cddb;border:1.5px solid rgba(255,255,255,.25)}
+  .s-btn.expand{background:rgba(255,255,255,.1);color:#e6e2d5}
+  .s-btn:hover{opacity:.9}
+
+  .disclaimer{font-family:"Noto Sans TC",sans-serif;font-size:12.5px;color:var(--muted);text-align:center;
+    margin:26px auto 0;max-width:640px;line-height:1.7;}
+  .foot{text-align:center;font-family:"Noto Sans TC",sans-serif;font-size:12px;color:var(--muted);padding:30px 20px 40px}
+  .foot .pg{color:var(--line-strong);margin-top:4px}
+
+  @media (max-width:520px){
+    .votes{flex-direction:column}
+    .card{padding:18px 16px 16px}
+    .card h3{font-size:17px}
+    header{padding:40px 18px 34px}
+  }
+  @media print{
+    .progress-bar,.s-actions{display:none!important}
+    body{background:#fff}
+    details.origin[open] .origin-body{display:block}
+    details.origin{break-inside:avoid}
+    .card{break-inside:avoid;box-shadow:none;border-color:#bbb}
+    header{background:#1b2a4a!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <p class="eyebrow">興時代社區 · 第六屆第一次區分所有權人會議</p>
+  <h1>議案投票單 · 完整版</h1>
+  <p class="sub-title">共 13 案表決 · 管委會提案 5 案、住戶提案 8 案 · 含提案人原稿</p>
+  <div class="meta-row">
+    <span class="meta-chip">📅 <b>115/07/26（日）</b> 09:00 開會</span>
+    <span class="meta-chip">📍 <b>本社區 1F 交誼廳</b></span>
+    <span class="meta-chip">🕙 10:00 報到截止</span>
+  </div>
+</header>
+
+<div class="progress-bar">
+  <span class="progress-label">已決定 <b id="doneCount">0</b> / 13</span>
+  <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+  <span class="progress-label" id="pctLabel">0%</span>
+</div>
+
+<main id="app"></main>
+
+<script>
+const AGREE_ICON='<svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+const X_ICON='<svg viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6L6 18" stroke="#fff" stroke-width="3" stroke-linecap="round"/></svg>';
+
+const items = [
+  {sec:1, id:"g1", tag:"議題一", type:"mc", title:"地下室滲漏水整體修繕授權案",
+   desc:"近年社區地下室多處發生滲漏水情形，經多次局部修繕仍未完全改善，初步研判可能與防水層、排水系統、共同管線或其他滲漏因素有關。為釐清原因並辦理必要修繕，擬授權管理委員會依檢測結果及實際施工需求分階段辦理；如涉及重大工程、重大經費支出或依法應提請區分所有權人會議決議事項，將另提區分所有權人會議討論。",
+   q:"您是否同意授權管理委員會辦理社區地下室滲漏水整體檢測、原因調查及必要修繕作業。"},
+
+  {sec:1, id:"g2", tag:"議題二", type:"mc", title:"共同排水管路維護制度訂定案",
+   desc:"本社區歷年均定期辦理 B1 共同排水管路清洗。為逐步建立共同排水管路定期維護機制，考量二樓以下共同排水管路施工條件及經費仍需評估，擬授權管理委員會依實際需求、施工可行性及年度預算，分階段辦理巡檢、清洗及必要維護作業。",
+   q:"您是否同意建立社區共同排水管路年度維護制度，並授權管理委員會依年度預算及實際需求辦理巡檢、清洗及必要維護。"},
+
+  {sec:1, id:"g3", tag:"議題三", type:"mc", title:"住戶安寧管理辦法訂定案",
+   desc:"為建立本社區住戶安寧事件之反映、協調及處理原則，並維護居住安寧與生活品質，管理委員會擬訂「興時代社區住戶安寧及生活品質管理辦法」（附件一），作為社區管理及住戶共同遵循之依據。",
+   q:"您是否同意訂定「興時代社區住戶安寧及生活品質管理辦法」（附件一），作為本社區住戶安寧及生活品質管理之依據。"},
+
+  {sec:1, id:"g4", tag:"議題四", type:"mc", title:"社區車牌辨識系統建置授權案",
+   desc:"為提升社區車輛進出管理效率及安全性，降低遙控器遺失、借用及複製風險，管理委員會已完成車牌辨識系統初步規劃及詢價，預估建置經費約 17.5 萬元至 19.9 萬元。",
+   q:"您是否同意授權管理委員會辦理社區車牌辨識系統建置，實際工程內容及經費依決標結果辦理。"},
+
+  {sec:1, id:"g5", tag:"議題五", type:"mc", title:"社區柴油發電機廢氣改善工程授權案",
+   desc:"本社區柴油發電機依法須每月定期測試運轉 5 至 10 分鐘，以確保緊急供電功能正常。因測試期間產生柴油廢氣及氣味，影響部分住戶生活品質，管理委員會已完成改善方案評估，目前規劃於四部柴油發電機加裝廢氣淨化器，預估經費約 373.5 萬元。<span class='hi'>淨化設備可降低廢氣污染物及改善異味，但無法完全消除柴油燃油氣味。</span>",
+   q:"您是否同意授權管理委員會辦理社區柴油發電機廢氣改善工程，於四部柴油發電機加裝廢氣淨化設備。"},
+
+  {sec:2, id:"r1", tag:"提案一", type:"res", title:"汽車停車格放置腳踏車案",
+   desc:"本案相關住戶提案內容詳如提案原稿。經管理委員會查閱本社區規約，現行《興時代社區規約》第十六條第二十四項規定，汽車停車格僅限停放汽車，不得停放腳踏車及其他物品；如涉及修正現行規約，應經區分所有權人會議決議辦理。另考量停放腳踏車可能涉及停車安全、消防安全及公共安全等事項，如因此致他人財物受損、人員傷害或公共安全事故者，其相關法律責任仍應依《民法》及其他相關法令辦理，不因本案決議結果而受影響。",
+   q:"您是否同意開放汽車停車格得放置車位使用人所有之一輛非電動腳踏車，並配合修正《興時代社區規約》第十六條第二十四項；管理委員會得依本次決議訂定相關管理細則。",
+   origins:[
+     {who:"提案人：溫O玲", blocks:[
+       {h:"案由", t:"汽車格可放置腳踏車"},
+       {h:"提案說明（原因、現況）", t:"家中有買腳踏車，但社區無擺放腳踏車專區，上萬元的腳踏車，無處可放也不能騎乘，真得很困擾"},
+       {h:"建議決議事項（希望表決內容）", t:"建議社區設置腳踏車專區。車位後方有一小空間，理應可放置腳踏車，因並不影響他人且那個空間畢竟是付費購買車位空間，住戶可以使用該空間才是合理。"}
+     ]},
+     {who:"提案人：陳O菁", blocks:[
+       {h:"案由", t:"建議汽車停車格內可放私人腳踏車"},
+       {h:"提案說明（原因、現況）", t:"因為家中小孩的腳踏車沒地方放，導致犧牲陽台曬衣空間。"},
+       {h:"建議決議事項（希望表決內容）", t:"汽車停車格內可放私人腳踏車。"}
+     ]}
+   ]},
+
+  {sec:2, id:"r2", tag:"提案二", type:"res", title:"社區增設機車停車位可行性評估授權案",
+   desc:"本案相關住戶提案內容詳如提案原稿。因本案涉及停車場原核准配置、建築物使用執照、停車空間設置規定、消防避難動線、交通動線、安全管理及公共空間使用等事項，尚需蒐集相關資料並洽詢主管機關及專業單位確認可行性，現階段尚無法確認是否得以施作及可增設數量。",
+   q:"您是否同意授權管理委員會評估社區增設機車停車位之可行性（包含來賓車位或其他適當空間），評估結果將依相關法令及實際可行性辦理；如依法須經區分所有權人會議決議者，再提請會議表決。",
+   origins:[
+     {who:"提案人：林O嘉", blocks:[
+       {h:"案由", t:"機車位明顯不足"},
+       {h:"提案說明（原因、現況）", t:"社區實屬大型社區，但是機車位明顯嚴重不足，現況鄰居間就算互相支援提供機車位承租，一樣求大於供給！日前平日看到「來賓車位」很多都是閒置，我認為是否可讓一些來賓車位空間出來劃分為機車位停車空間呢？承租費用就可納入管理費基金！※ 來賓不是「住戶」，應該把這權利多讓給住戶享用，來賓停車都有莊敬北路或社區及鄰居借來使用都很好借。"},
+       {h:"建議決議事項（希望表決內容）", t:"來賓車位劃分部分為機車停車位。"}
+     ]},
+     {who:"提案人：羅O佑", blocks:[
+       {h:"案由", t:"（未填寫）"},
+       {h:"提案說明（原因、現況）", t:"1. B3 243 號車位，天花板上方漏水。★此提案併入【議題一】地下室滲漏水整體修繕授權案\n2. 新增機車位。（1 格停車位租金，喊到破千，太扯。）"},
+       {h:"建議決議事項（希望表決內容）", t:"1. B3 漏水，儘快修繕，反應多次，一年多都未處理，請重視。\n2. 希望可以新增 B1 機車停車格。"}
+     ]}
+   ]},
+
+  {sec:2, id:"r3", tag:"提案三", type:"res", title:"掛號通知牌設置評估案",
+   desc:"本案涉及社區郵務通知方式及管理作業，相關住戶提案內容詳如提案原稿。",
+   q:"您是否同意授權管理委員會評估於社區信箱設置「掛號通知牌」之可行性（限當日有掛號郵件之住戶信箱放置通知牌），並依管理需求、經費及實際作業方式辦理。",
+   origins:[
+     {who:"提案人：秦O佳、游O升", blocks:[
+       {h:"案由", t:"建議使用掛號通知掛牌"},
+       {h:"提案說明（原因、現況）", t:"由於社區掛號信有限時領取（逾期會被退回），僅靠智慧生活可能會沒有留意到，故希望效法其他社區，直接設置郵箱掛牌，讓居民出入都可以直觀從信箱看見有掛號，直接櫃台取信。"},
+       {h:"建議決議事項（希望表決內容）", t:"是否設置「掛號通知牌」於郵箱上。（針對當日掛號收件戶放置掛牌）"}
+     ]}
+   ]},
+
+  {sec:2, id:"r4", tag:"提案四", type:"res", title:"社區中央軟水設備可行性評估授權案",
+   desc:"本案相關住戶提案內容詳如提案原稿。經初步洽詢廠商，社區中央軟水設備概估經費如下：買斷方案首次建置費約 216 萬元、年度保養費約 59.48 萬元；租賃方案首次建置費約 32 萬元、年度租賃費約 93.6 萬元。因本案涉及公共設備增設、工程經費、後續維護及整體效益等事項，仍須進一步評估其可行性，爰提請區分所有權人會議討論。",
+   q:"您是否同意授權管理委員會辦理社區中央軟水設備可行性評估（包含建置成本、維護費用、效益分析及相關規劃）；如評估具可行性，再提請區分所有權人會議決議是否建置。",
+   origins:[
+     {who:"提案人：范O瑄", blocks:[
+       {h:"案由", t:"建議管委會評估於社區公共給水系統增設中央軟水設備，以提升住戶用水品質及降低公設維護成本。"},
+       {h:"提案說明（原因、現況）", t:"入住本社區已約五年，近年發現住宅的水龍頭、蓮蓬頭、地板等用水處水垢實在非常容易產生，清除後也非常容易再有，公共設備也是如此，大廳的洗手台也容易發現水垢，更不說在公共管線加壓設備等用水設施，也會積累水垢，造成維護成本。因本社區約有 500 多戶，用水量大，若以多人負擔中央軟水維護成本，應相對划算且有共利！"},
+       {h:"建議決議事項（希望表決內容）", t:"希望可以先進行中央軟水設備的可行性評估、維護成本、效益分析等，再讓住戶決議是否建置。"}
+     ]}
+   ]},
+
+  {sec:2, id:"r5", tag:"提案五", type:"res", title:"社區汽、機車位出租／承租需求登記及資訊媒合機制案",
+   desc:"本案相關住戶提案內容詳如提案原稿。為協助社區住戶媒合汽、機車位出租及承租需求，管理委員會已製作「興時代社區汽、機車位出租/承租需求登記表」（附件二），並置放於一樓櫃檯供住戶登記使用。管理中心僅協助受理登記、公告及資訊轉達，不介入租賃媒合、議價、契約簽訂、履約或租賃爭議處理。",
+   q:"您是否同意建立社區汽、機車位出租/承租需求登記及資訊媒合機制，由管理中心依附件二受理登記、公告及資訊轉達，以提升社區停車位使用效率；相關管理方式由管理委員會另行訂定。",
+   origins:[
+     {who:"提案人：柯O好", blocks:[
+       {h:"案由", t:"建議建立社區機車/汽車位出租/承租需求登記與媒合機制。建議加入社區 Line 群組推廣及資訊傳遞機制。"},
+       {h:"提案說明（原因、現況）", t:"目前住戶如有汽機車位出租或承租需求，僅能自行於 Line 群組提問，但社區戶數眾多，Line 群組加入率有限，造成資訊傳遞效果有限。平時可觀察到社區內部分車位並非經常使用，但因缺乏正式的資訊媒合管道，無法得知住戶是否有出租意願，導致有需求與有意出租的住戶難以媒合。社區目前許多公告及住戶資訊透過 Line 社群發布，但仍有不少住戶未加入，導致重要公告、住戶需求、資訊無法有效傳遞。"},
+       {h:"建議決議事項（希望表決內容）", t:"建立社區機／汽車位出租、承租需求登記制度。由管理中心協助公告需求或代為轉達資訊。由有出租意願之住戶自行聯繫承租需求者，以提升社區閒置車位使用率與媒合效率。新住戶入住時由管理中心主動邀請加入社區群組、社群。於管理中心、公告欄及電梯等公共區域張貼群組、社群 QR code，方便住戶加入。定期宣導住戶加入社區 LINE 群組、社群，提高社區資訊傳遞效率"}
+     ]}
+   ]},
+
+  {sec:2, id:"r6", tag:"提案六", type:"res", title:"社區公告及資訊傳遞機制案",
+   desc:"本案相關住戶提案內容詳如提案原稿。經 115 年 6 月 28 日第五屆管理委員會例行會議決議，社區 LINE 大群屬住戶自行成立之私人群組，管理委員會及管理中心不介入其管理、資格審核或住戶個人資料查驗。另考量社區部分住戶為承租人，為確保全體住戶均能接收一致之社區資訊，現行正式公告均以<span class='hi'>「智生活平台」</span>為主要發布窗口。",
+   q:"您是否同意維持「智生活平台」為社區正式公告及資訊發布之主要窗口，由管理委員會及管理中心統一發布社區公告；住戶自行成立之 LINE 群組或其他社群，僅供住戶交流使用，不作為社區正式公告或通知依據。",
+   origins:[
+     {who:"提案六之背景", note:true, blocks:[
+       {h:"說明", t:"提案六的住戶原稿與提案五為同一位提案人（柯O好）所提，內容已併於提案五之原稿中（關於加入社區 LINE 群組推廣及資訊傳遞機制）。管委會就此另立提案六，維持「智生活平台」為正式公告窗口。"}
+     ]}
+   ]},
+
+  {sec:2, id:"r7", tag:"提案七", type:"res", title:"社區公共設施事故處理及保險制度建立案",
+   desc:"本案相關住戶提案內容詳如提案原稿。本案事故目前已依程序完成事故勘查、緊急修繕及保險理賠申請，後續仍依保險契約、相關法令及協商結果辦理。為建立社區公共設施事故一致之處理原則，管理委員會已研擬「興時代社區公共設施事故處理辦法」（附件三），並將持續檢討社區公共保險保障內容及理賠範圍，作為後續制度檢討之參考。<span class='hi'>本案表決係針對制度建立，不涉及個案責任認定、民事賠償或和解內容之決議。</span>",
+   q:"您是否同意訂定「興時代社區公共設施事故處理辦法」（附件三），作為本社區公共設施事故處理及後續管理之依據。",
+   origins:[
+     {who:"提案人：卓O琦", blocks:[
+       {h:"案由", t:"建請建立社區共用部分（共管）設施造成住戶損害之處理及補償機制，並授權管理委員會依法處理本案及後續類似案件。"},
+       {h:"提案說明（原因、現況）", t:"本人所有房屋因社區共用部分（共管）漏水，造成室內財物受損及房屋無法正常出租。經社區通報保險公司處理後，社區僅以保險公司依保險契約理賠財物損失；惟租金損失、房屋空置期間損失、修繕期間衍生費用及其他相關損害，均因保險保障範圍限制而無法獲得補償。\n依《公寓大廈管理條例》第 10 條及第 36 條規定，管理委員會負有維護共用部分之修繕、管理及維護之職責，並應對社區公共安全及正常使用狀態負管理義務。另依民法侵權行為及管理責任之一般原則，社區對因共用部分管理或維護不善所致之損害，除應負擔修繕及回復原狀之責任外，亦涉及對受損住戶合理損害填補義務。\n因此，管理委員會之責任不僅限於實質財物損害之處理，更包含預防損害擴大、建立制度性管理機制，以及確保類似事件不再發生之整體管理責任，以維護全體區分所有權人之共同利益與居住安全。\n本案損害係因社區共用部分所造成，若僅因保險保障不足，即由受害住戶自行承擔全部損失，對住戶權益顯失公平，亦缺乏社區一致性的處理原則。為保障全體區分所有權人權益，避免未來發生類似事件時因缺乏制度而產生爭議，爰提出本案。"},
+       {h:"建議決議事項（希望表決內容）", t:"一、請區分所有權人會議授權管理委員會，依《公寓大廈管理條例》及《民法》相關規定，就本人因社區共用部分漏水所造成，而保險未予理賠之租金損失、房屋空置損失、修繕期間衍生費用及其他依法應負擔之損害，與本人進行協商，並提出合理處理方案。\n二、請管理委員會研擬「社區共用部分致住戶損害處理辦法」，建立事故通報、責任認定、損害賠償及處理程序等標準，以作為日後類似案件之處理依據。\n三、請管理委員會重新檢視現行社區保險內容，評估是否調整保險保障範圍或增加相關保險，以降低公共設施事故造成住戶權益受損而無法獲得完整補償之情形。"},
+       {h:"（提案人補述）", t:"本提案目的並非要求區分所有權人會議直接決定個案賠償金額，而是希望建立公平合理之處理機制，並授權管理委員會依法積極處理本案，以維護全體區分所有權人之共同利益及社區管理品質。如管理委員會認為本案依法應由社區負擔相關賠償責任，請依區分所有權人會議授權，儘速與本人完成協商，以避免衍生不必要之訴訟成本及社區共同支出。"}
+     ]}
+   ]},
+
+  {sec:2, id:"r8", tag:"提案八", type:"res", title:"重大工程施工辦法訂定案",
+   desc:"本案相關住戶提案內容詳如提案原稿。為建立本社區重大工程施工及住戶權益保障之標準作業程序，管理委員會研擬「興時代社區重大工程施工及住戶權益保障作業辦法」（附件四），提請區分所有權人會議討論。<span class='hi'>本案係建立未來重大工程處理原則，不影響已完成之個案決議。</span>",
+   q:"您是否同意訂定「興時代社區重大工程施工及住戶權益保障作業辦法」，作為本社區未來重大工程施工及住戶權益保障之管理依據。",
+   origins:[
+     {who:"提案人：吳O釗", blocks:[
+       {h:"案由", t:"管理費的清潔費項目討論"},
+       {h:"提案說明（原因、現況）", t:"這月群組非常多意見表達該領 600，或不該領 1200 的想法出來，像我這邊統計看到不補助名單是 175 位，補助 600 為 95 位，最後補助 1200 元的是 46 位（含我在內）。主要是想表達管委會辛苦了，我覺得過程大致沒不妥，因有登記而未抽到的住戶真的很不方便，且 1200 元成本，對於我來說算是少額補助，非全額，因此請管委會維持少數沒抽到兩季補助住戶的權益，我挺管委員。"},
+       {h:"建議決議事項（希望表決內容）", t:"1. 請勿取消原來 46 位的住戶權益，因 B1、B2 住戶未影響到，很容易被區權會多數決而否定，可為對 B3、B4 車主沒車位的傷害。\n2. 至於 175 位車主中，放棄讓車位的住戶，我覺得可討論補償方式，畢竟管委會說過沒使用的，拜託讓出車位出來。\n3. 未登記的沒有理由要求補償，因自己不登記，代表沒車位需求，或漠不關心，我覺得站不住腳。"}
+     ]},
+     {who:"提案人：吳O釗（提案主旨）", blocks:[
+       {h:"提案主旨", t:"建議建立社區於施工、臨時措施或其他影響住戶權益事件之公告、補助及決策程序，以提升資訊透明度、保障住戶權益，並減少未來爭議。"},
+       {h:"提案說明", t:"本次地下停車場施工期間，因涉及車位使用、停車安排及補助措施，住戶間產生許多討論與疑問。雖然後續經住戶反映後，補助方案已逐步調整，目前也已完成補助爭取，正等待相關作業程序辦理，對於管委會願意持續協調及改善表示肯定。\n然而，本次事件也反映出制度上仍有值得檢討及完善之處，希望藉由區權會正式討論，建立未來一致且明確的處理機制，而非僅針對本次個案。"},
+       {h:"建議討論事項如下", t:"1. 重大施工或影響住戶權益之事項，相關公告內容應一次完整說明。\n包括適用對象、申請方式、資格認定、補助或減免內容、期限及相關限制，避免事後再以口頭方式補充或變更認定標準。\n2. 建立補助、減免或其他權益措施之標準作業程序。\n未來若因施工、設備維修或其他特殊情形需提供補助、減免或替代措施，建議訂定一致的作業流程及公告方式，使所有住戶都能清楚了解自身權益。\n3. 建立第一線資訊傳達機制。\n本次事件中，物業第一時間提供的資訊與後續認定有所落差，導致部分住戶依照當時說明作出決定，後續又產生不同解讀，引發許多誤會與爭議。建議未來重大事項應由管委會確認後，再由物業統一對外說明，以避免資訊不一致。\n4. 釐清重大補助或權益措施之決策程序。\n本次亦有住戶提出疑問，認為涉及補助、減免或共同基金支出等事項，其決策程序是否應依相關法令、規約或區權會決議辦理，建議管委會於區權會中一併說明相關法源依據及決策流程，讓住戶了解程序是否完備，提升制度透明度。\n5. 建立未來可遵循之制度。\n希望透過本次經驗，建立標準化、公開透明且一致的處理原則，使未來遇到類似施工或特殊事件時，住戶、物業及管委會皆能有所依循，降低誤解與爭議，保障全體住戶權益。"},
+       {h:"提案目的", t:"本提案並非針對任何個人或單一事件，而是希望透過本次經驗，建立更完善的制度及程序，讓社區未來面對類似情形，能以公開、透明且一致的方式處理，提升住戶信任，也減少後續爭議。"}
+     ]},
+     {who:"提案人：吳O釗（車道改善工程／控訴管委會失職）", blocks:[
+       {h:"案由", t:"茲因車道改善工程，控訴管委會失職。"},
+       {h:"提案說明", t:"一、第一次 B1 停車位抽籤，未事先公告，邀請住戶列席，逕行抽籤，不符公正、公開。\n二、車位需求登記（星期五）下午五點截止，有消息指出，當天就抽籤，為何隔週一才公告？擔誤住戶決擇的時間。\n三、清潔費減免，如何能依據 115 年 6 月 28 日管委會會議決議處理？事後會議決議，對住戶不公，住戶成了待宰羔羊。\n四、大眾事務要事先說清楚講明白，在過去的公告裡從未提到補助與不補助的條件。這次車道改善工程所有的問題，都由 B3、B4 的住戶來承擔，管委會沒有責任嗎？"},
+       {h:"附件一、115 年 5 月 6 日車道修繕說明第二條", t:"未使用 B3、B4 的住戶會提供一季 600 元汽車位清潔費減免，性質屬施工期間之適度補助。（依據此條款，未使用皆可減免。）如不影響自己使用，也歡迎大家自願釋出車位協助調度無強制性。"},
+       {h:"附件二、115 年 6 月 28 日管委會會議記錄", t:"已分配臨時停車資源（包含 B1 臨時車位、社區調撥車位及社區外短租停車位）者，無論是否實際使用，如因個人因素自行放棄，另行租用或自行安排停車，均視為已取得社區提供之停車資源，不另適用其他補助。"},
+       {h:"建議決議事項", t:"清潔費補助由（附件一）的寬鬆演變成（附件二）如此的嚴屬，住戶自行租車位，實在是管委會提供的車位嚴重不足，住戶必須自立救濟，住戶何錯之有，要接受這樣的懲罰，管委會也鼓勵釋出車位，管委會應該感謝住戶，如何能視為已取得社區提供之停車資源？管委會未支付住戶車位租金，是住戶的資源，怎麼就成了管委會的資源？\n敬請管委會修改清潔費補助條款"}
+     ]}
+   ]},
+];
+
+const app=document.getElementById('app');
+const votes={};
+
+function sectionHead(kanji,en){
+  const d=document.createElement('div');
+  d.className='section-head';
+  d.innerHTML=`<span class="kanji">${kanji}</span><span class="en">${en}</span><span class="rule"></span>`;
+  return d;
+}
+function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function nl(s){return esc(s).replace(/\n/g,'<br>');}
+
+app.appendChild(sectionHead('管委會提案','Committee · 5'));
+let currentSec=1;
+
+items.forEach(it=>{
+  if(it.sec===2 && currentSec===1){
+    app.appendChild(sectionHead('住戶提案','Residents · 8'));
+    currentSec=2;
+  }
+  const card=document.createElement('article');
+  card.className='card';
+  card.id='card-'+it.id;
+
+  let originHTML='';
+  if(it.origins){
+    const inner=it.origins.map(o=>{
+      const bl=o.blocks.map(b=>`<div class="o-block"><div class="o-h">${esc(b.h)}</div><p>${nl(b.t)}</p></div>`).join('');
+      return `<div class="origin-person"><div class="o-h" style="color:var(--gold);font-size:13.5px;margin-top:14px">${esc(o.who)}</div>${bl}</div>`;
+    }).join('');
+    originHTML=`<details class="origin"><summary><span class="chev">▶</span>展開提案人原稿（<span class="who">${it.type==='res'?'住戶提案原文':''}</span>）</summary><div class="origin-body">${inner}</div></details>`;
+  }
+
+  card.innerHTML=`
+    <div class="card-top">
+      <span class="tag ${it.type==='res'?'resident':''}">${it.tag}</span>
+      <h3>${it.title}</h3>
+    </div>
+    <div class="label-mini">【說明】管委會擬訂</div>
+    <p class="desc">${it.desc}</p>
+    ${it.cost?`<div class="cost">💰 ${it.cost}</div>`:''}
+    ${originHTML}
+    <div class="question"><span class="q-mark">表決事項</span>${it.q}</div>
+    <div class="votes">
+      <button class="vote-btn agree" data-id="${it.id}" data-v="agree" aria-pressed="false">
+        <span class="dot">${AGREE_ICON}</span>同意
+      </button>
+      <button class="vote-btn disagree" data-id="${it.id}" data-v="disagree" aria-pressed="false">
+        <span class="dot">${X_ICON}</span>不同意
+      </button>
+    </div>`;
+  app.appendChild(card);
+});
+
+const summary=document.createElement('section');
+summary.className='summary';
+summary.innerHTML=`
+  <h2>投票總覽</h2>
+  <p class="s-sub">開會前可在此檢查所有選擇 · 資料僅存在此頁面，關閉後不保留</p>
+  <div class="s-list" id="sList"></div>
+  <div class="s-actions">
+    <button class="s-btn expand" id="expandBtn">▽ 全部展開原稿</button>
+    <button class="s-btn print" onclick="window.print()">🖨️ 列印／存 PDF</button>
+    <button class="s-btn reset" id="resetBtn">↺ 全部清除</button>
+  </div>`;
+app.appendChild(summary);
+
+const disc=document.createElement('p');
+disc.className='disclaimer';
+disc.textContent='本頁為方便閱讀與整理個人投票意向之輔助工具，非正式投票文件。表決事項與說明均依社區發放資料完整呈現；提案人原稿為住戶提案原文。實際投票請以社區發放之正式投票單為準，並依會議規定辦理。';
+app.appendChild(disc);
+
+function updateProgress(){
+  const done=Object.keys(votes).length;
+  document.getElementById('doneCount').textContent=done;
+  const pct=Math.round(done/items.length*100);
+  document.getElementById('progressFill').style.width=pct+'%';
+  document.getElementById('pctLabel').textContent=pct+'%';
+  renderSummary();
+}
+function renderSummary(){
+  const list=document.getElementById('sList');
+  list.innerHTML='';
+  items.forEach(it=>{
+    const v=votes[it.id];
+    const row=document.createElement('div');
+    row.className='s-item';
+    const cls=v==='agree'?'a':v==='disagree'?'d':'none';
+    const txt=v==='agree'?'同意':v==='disagree'?'不同意':'未決定';
+    row.innerHTML=`<span class="s-num">${it.tag}</span><span class="s-name">${it.title}</span><span class="s-val ${cls}">${txt}</span>`;
+    row.onclick=()=>document.getElementById('card-'+it.id).scrollIntoView({block:'center'});
+    list.appendChild(row);
+  });
+}
+app.addEventListener('click',e=>{
+  const btn=e.target.closest('.vote-btn');
+  if(!btn)return;
+  const id=btn.dataset.id,v=btn.dataset.v;
+  const card=document.getElementById('card-'+id);
+  const both=card.querySelectorAll('.vote-btn');
+  if(votes[id]===v){
+    delete votes[id];
+    both.forEach(b=>{b.classList.remove('on');b.setAttribute('aria-pressed','false')});
+    card.classList.remove('voted');
+  }else{
+    votes[id]=v;
+    both.forEach(b=>{const on=b.dataset.v===v;b.classList.toggle('on',on);b.setAttribute('aria-pressed',on?'true':'false');});
+    card.classList.add('voted');
+  }
+  updateProgress();
+});
+document.getElementById('resetBtn').addEventListener('click',()=>{
+  Object.keys(votes).forEach(k=>delete votes[k]);
+  document.querySelectorAll('.vote-btn').forEach(b=>{b.classList.remove('on');b.setAttribute('aria-pressed','false')});
+  document.querySelectorAll('.card').forEach(c=>c.classList.remove('voted'));
+  updateProgress();
+});
+let allOpen=false;
+document.getElementById('expandBtn').addEventListener('click',e=>{
+  allOpen=!allOpen;
+  document.querySelectorAll('details.origin').forEach(d=>d.open=allOpen);
+  e.target.textContent=allOpen?'△ 全部收合原稿':'▽ 全部展開原稿';
+});
+renderSummary();
+</script>
+</body>
+</html>
